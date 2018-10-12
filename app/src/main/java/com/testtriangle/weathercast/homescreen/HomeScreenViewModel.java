@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import com.testtriangle.weathercast.weather.WeatherRepository;
 import com.testtriangle.weathercast.weather.data.WeatherForecastResponse;
 
-public class HomeScreenViewModel extends AndroidViewModel{
+public class HomeScreenViewModel extends AndroidViewModel {
 
     private WeatherRepository weatherRepository;
 
@@ -18,14 +18,21 @@ public class HomeScreenViewModel extends AndroidViewModel{
         super(application);
 
         weatherRepository = new WeatherRepository();
-
     }
 
-    public void getWeatherForecast(double latitude, double longitude){
+    /**
+     * This function will call get forecast data API
+     * @param latitude Double latitude
+     * @param longitude Double longitude
+     */
+    public void getWeatherForecast(double latitude, double longitude) {
         weatherForecastResponseLiveData = weatherRepository.getWeatherForecast(latitude, longitude);
     }
 
-    //get weather forecast data
+    /**
+     * This function will return data to observer in activity
+     * @return LiveData
+     */
     public LiveData<WeatherForecastResponse> getWeatherForecastResponseLiveData() {
         return weatherForecastResponseLiveData;
     }

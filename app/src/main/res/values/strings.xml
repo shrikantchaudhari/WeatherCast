@@ -1,10 +1,7 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">WeatherCast</string>
     <string name="degree_symbol">\u00B0</string>
     <string name="error_in_response">Error in getting weather data. Please try again later.</string>
     <string name="weather_status">Weather status icon</string>
 
-    <string name="title_activity_splash_screen">SplashScreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

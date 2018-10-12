@@ -1,8 +1,3 @@
-/**
- * @file Constants.java
- * @brief This Class includes various constants that are needed through out the application.
- */
-
 package com.testtriangle.weathercast.common;
 
 public class Constants {

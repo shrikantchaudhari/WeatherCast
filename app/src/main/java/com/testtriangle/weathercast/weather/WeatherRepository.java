@@ -1,8 +1,6 @@
 package com.testtriangle.weathercast.weather;
 
-import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
 
 import com.testtriangle.weathercast.network.ApiClient;
 import com.testtriangle.weathercast.network.ApiInterface;
@@ -23,6 +21,13 @@ public class WeatherRepository {
         apiService = ApiClient.getClient().create(ApiInterface.class);
     }
 
+    /**
+     * This function will give call to get Weather Forecast data API
+     *
+     * @param latitude  double latitude
+     * @param longitude double longitude
+     * @return LiveData
+     */
     public MutableLiveData<WeatherForecastResponse> getWeatherForecast(double latitude, double longitude) {
 
         final MutableLiveData<WeatherForecastResponse> data = new MutableLiveData<>();
@@ -33,15 +38,13 @@ public class WeatherRepository {
             public void onResponse(Call<WeatherForecastResponse> call, Response<WeatherForecastResponse> response) {
 
                 WeatherForecastResponse weatherForecastResponse = response.body();
-                if(weatherForecastResponse != null){
+                if (weatherForecastResponse != null) {
                     data.setValue(weatherForecastResponse);
                 }
-
             }
 
             @Override
             public void onFailure(Call<WeatherForecastResponse> call, Throwable t) {
-
                 data.setValue(null);
             }
         });

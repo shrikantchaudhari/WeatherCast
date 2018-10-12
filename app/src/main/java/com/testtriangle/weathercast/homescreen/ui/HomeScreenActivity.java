@@ -3,7 +3,6 @@ package com.testtriangle.weathercast.homescreen.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -42,7 +41,7 @@ import static com.testtriangle.weathercast.common.Constants.SCATTERED_CLOUDS;
 public class HomeScreenActivity extends AppCompatActivity implements LocationListener {
 
 
-    HomeScreenViewModel homeScreenViewModel;
+    private HomeScreenViewModel homeScreenViewModel;
     private Unbinder unbinder;
 
     @BindView(R.id.iv_weather_status)
@@ -97,7 +96,6 @@ public class HomeScreenActivity extends AppCompatActivity implements LocationLis
     LinearLayout llMainContent;
 
     private final int REQUEST_LOCATION_PERMISSION = 1;
-    private LocationManager mLocationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +108,6 @@ public class HomeScreenActivity extends AppCompatActivity implements LocationLis
 
         requestLocationPermission();
 
-
     }
 
     @Override
@@ -121,31 +118,46 @@ public class HomeScreenActivity extends AppCompatActivity implements LocationLis
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+    /**
+     * This function will handle location runtime permission
+     */
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
     public void requestLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
         if (EasyPermissions.hasPermissions(this, perms)) {
 
-            mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
             Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
-                homeScreenViewModel.getWeatherForecast(location.getLatitude(), location.getLongitude());
 
-                observeWeatherData();
-
-                isShowProgressBar(true);
+                // If we have location then call for weather API
+                callGetWeatherApi(location);
             } else {
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             }
-
 
         } else {
             EasyPermissions.requestPermissions(this, "Please grant the location permission", REQUEST_LOCATION_PERMISSION, perms);
         }
     }
 
+    /**
+     * This function will call get weather forecast data API
+     * @param location
+     */
+    private void callGetWeatherApi(Location location) {
+        homeScreenViewModel.getWeatherForecast(location.getLatitude(), location.getLongitude());
+
+        observeWeatherData();
+
+        isShowProgressBar(true);
+    }
+
+    /**
+     * This is the observer method which will get called when we get response from API
+     */
     public void observeWeatherData() {
         homeScreenViewModel.getWeatherForecastResponseLiveData().observe(this, weatherForecastResponse -> {
 
@@ -330,6 +342,8 @@ public class HomeScreenActivity extends AppCompatActivity implements LocationLis
             pbLoad.setVisibility(View.GONE);
         }
     }
+
+    // Location callbacks
 
     @Override
     public void onLocationChanged(Location location) {
