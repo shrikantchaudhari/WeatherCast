@@ -35,3 +35,4 @@ Right now this application supports really limited functionality. In future, if 
 ### Known Issues
 - You can not change the location once set for the first time.
 - Instead of mapping API data individually in the UI element we can use Data binding.
+- Error handling is pending if the user does not allow the app to use there location.
